@@ -101,7 +101,7 @@ find(char* path, char* name){
 #ifdef DEBUG
           printf("found -> %s %d %d %l\n", dirName, st.type, st.ino, st.size);
 #endif
-          fprintf(2, "%s\n", buf);
+          fprintf(1, "%s\n", buf);
       }
     }
     break;

@@ -1,0 +1,6 @@
+Boot xv6 (easy)	1h
+sleep (easy)	0.5h
+pingpong (easy)	1h
+primes (moderate)/(hard) 3h
+find (moderate) 4h
+xargs (moderate) 4h

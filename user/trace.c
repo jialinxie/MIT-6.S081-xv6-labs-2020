@@ -1,7 +1,7 @@
-#include "kernel/param.h"
-#include "kernel/types.h"
-#include "kernel/stat.h"
-#include "user/user.h"
+#include "../kernel/param.h"
+#include "../kernel/types.h"
+#include "../kernel/stat.h"
+#include "user.h"
 
 int
 main(int argc, char *argv[])
@@ -22,6 +22,9 @@ main(int argc, char *argv[])
   for(i = 2; i < argc && i < MAXARG; i++){
     nargv[i-2] = argv[i];
   }
+
+  // fprintf(2, "trace.c from user nargv[0] = %s, nargv[1] = %s, nargv[2] = %s\n", nargv[0], nargv[1], nargv[2]);
+
   exec(nargv[0], nargv);
   exit(0);
 }

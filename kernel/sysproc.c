@@ -101,11 +101,19 @@ sys_trace(void)
 {
   int mask;
 
-  // printf("sys_trace from kernel start!\n");
   if(argint(0, &mask) < 0)
     return -1;
 
   myproc()->mask = mask;
-  // printf("sys_trace from kernel done!\n");
   return 0;
+}
+
+uint64
+sys_sysinfo(void){
+  uint64 info;
+
+  if(argaddr(0, &info) < 0)
+    return -1;
+
+  return systeminfo(info);
 }

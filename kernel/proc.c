@@ -195,8 +195,9 @@ proc_pagetable(struct proc *p)
 
     // map the USYSCALL just below KERNEL Base, for USYSCALL.
   if(mappages(pagetable, USYSCALL, PGSIZE,
-              (uint64)(p->ucall), PTE_R) < 0){
-    uvmunmap(pagetable, USYSCALL, 1, 0);
+              (uint64)(p->ucall), PTE_R | PTE_U) < 0){
+    uvmunmap(pagetable, TRAMPOLINE, 1, 0);
+    uvmunmap(pagetable, TRAPFRAME, 1, 0);
     uvmfree(pagetable, 0);
     return 0;
   }

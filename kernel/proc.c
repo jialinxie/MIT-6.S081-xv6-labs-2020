@@ -718,3 +718,46 @@ procdump(void)
     printf("\n");
   }
 }
+
+/**
+ * @brief 
+ * First, it takes the starting virtual address of the first user page to check. 
+ * Second, it takes the number of pages to check. 
+ * Finally, it takes a user address to a buffer to store the results into a bitmask
+ * (a datastructure that uses one bit per page and where the first page corresponds to the least significant bit)
+ * 
+ * @param va 
+ * @param num 
+ * @param ua 
+ */
+int
+pgaccess(uint64 va, uint64 num, uint64 ua){
+    pte_t *pte;
+    uint64 mask = 0;
+    uint64 vai = va;
+  //先提取一下参数
+    struct proc* p =myproc();
+    p->pagetable = proc_pagetable(p);
+
+    for(int i = 0; i < num; i++){
+
+      if(vai >= MAXVA){
+        return 0;
+      }
+
+      pte = walk(p->pagetable, vai, 0);
+      vai += PGSIZE;
+
+      if(pte == 0){
+        continue;
+      }
+
+      if(*pte & PTE_A){
+        *pte &= ~(PTE_A);
+        mask |= (1 << i);
+      }
+    }
+
+    copyout(p->pagetable, ua, (char *)&mask, sizeof(mask));
+    return 0;  
+}

@@ -95,3 +95,16 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+uint64
+sys_pgaccess(void){
+  uint64 userpage_ptr,  ua;
+  int num;
+
+  if(argaddr(0, &userpage_ptr) < 0 || argint(1, &num) < 0 || argaddr(2, &ua) < 0)
+    return -1;
+  
+  pgaccess(userpage_ptr, num, ua);
+
+  return 0;
+}

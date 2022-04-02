@@ -133,18 +133,16 @@ printfinit(void)
   pr.locking = 1;
 }
 
+// These lecture notes have a picture of the layout of stack frames. 
+// Note that the return address lives at a fixed offset (-8) from the 
+// frame pointer of a stackframe, and that the saved frame pointer 
+// lives at fixed offset (-16) from the frame pointer.
 void backtrace(){
   printf("backtrace: \n");
-  uint64 *fp = (uint64*)r_fp();
-  uint64 up = PGROUNDUP((uint64)fp);
-  // printf("r_fp : *fp = %d, fp = %p up = %d\n", *fp, fp, up);
-  uint64* ra;
-  while((uint64)fp != up){
-    fp = (uint64*)((uint64)fp - 16);
-    ra = (uint64*)((uint64)fp + 8);
-    printf("%p\n", *ra);
-    // printf("S0 *fp = %d, fp = %p\n", *fp, fp);
-    fp = (uint64*)*fp;
-    // printf("S1 *fp = %d, fp = %p\n", *fp, fp);
+  uint64 fp = r_fp();
+  while(PGROUNDUP(fp) - PGROUNDDOWN(fp) == PGSIZE){
+    uint64 ret_addr = *(uint64 *)(fp - 8);
+    printf("%p\n", ret_addr);
+    fp = *((uint64 *)(fp - 16));
   }
 }
